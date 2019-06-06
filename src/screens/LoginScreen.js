@@ -11,11 +11,12 @@ import {
 import { Font } from "expo";
 import { firebaseApp } from "./../connectDatabase/connectFirebase";
 import LoadingScreen from "./LoadingScreen";
+import { connect } from "react-redux";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
 
-export default class LoginScreen extends React.Component {
+class LoginScreen extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -34,17 +35,18 @@ export default class LoginScreen extends React.Component {
   }
 
   Login() {
-    firebaseApp
-      .auth()
-      .signInWithEmailAndPassword(this.state.email, this.state.password)
-      .then(() => {
-        this.setState({
-          email: "",
-          password: ""
-        });
-        this.props.navigation.navigate("Main");
-      })
-      .catch(function(error) {});
+    // firebaseApp
+    //   .auth()
+    //   .signInWithEmailAndPassword(this.state.email, this.state.password)
+    //   .then(() => {
+    //     this.setState({
+    //       email: "",
+    //       password: ""
+    //     });
+    this.props.navigation.navigate("AppStackNavigator");
+    //   })
+    //   .catch(function(error) {});
+    this.props.signInDispatch(this.state.email);
   }
 
   render() {
@@ -67,7 +69,7 @@ export default class LoginScreen extends React.Component {
                 placeholderTextColor="#D8D8D8"
                 selectionColor="white"
                 underlineColorAndroid="white"
-                onChangeText={email => this.setState({ email })}
+                onChangeText={email => this.setState({ email: email })}
                 value={this.state.email}
               />
               <TextInput
@@ -76,7 +78,8 @@ export default class LoginScreen extends React.Component {
                 placeholderTextColor="#D8D8D8"
                 selectionColor="white"
                 underlineColorAndroid="white"
-                onChangeText={password => this.setState({ password })}
+                secureTextEntry={true}
+                onChangeText={password => this.setState({ password: password })}
                 value={this.state.password}
                 secureTextEntry={true}
               />
@@ -84,11 +87,23 @@ export default class LoginScreen extends React.Component {
             <View style={styles.view}>
               <TouchableOpacity
                 style={styles.buttonContainer}
-                onPress={() =>
-                  this.props.navigation.navigate("AppStackNavigator")
-                }
+                onPress={() => this.Login()}
               >
                 <Text style={styles.loginText}>LOG IN</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ marginTop: 20 }}
+                onPress={() => this.props.navigation.navigate("SignUp")}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    fontSize: 15,
+                    textDecorationLine: "underline"
+                  }}
+                >
+                  Create new account
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -99,6 +114,20 @@ export default class LoginScreen extends React.Component {
     );
   }
 }
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    signInDispatch: email => {
+      dispatch({ type: "SIGN_IN", email });
+    }
+  };
+};
+
+export default connect(
+  null,
+  mapDispatchToProps,
+  null
+)(LoginScreen);
 
 const styles = StyleSheet.create({
   container: {
@@ -127,10 +156,11 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     paddingRight: 5,
     color: "white",
-    fontSize: 15,
+    fontSize: 20,
     alignSelf: "stretch",
     marginBottom: 15,
-    height: 50
+    width: "100%",
+    height: "15%"
   },
   buttonContainer: {
     backgroundColor: "#182C61",

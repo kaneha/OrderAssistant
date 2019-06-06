@@ -10,7 +10,7 @@ export default class AccountScreen extends Component {
           <Text style={styles.text}>Edit profile</Text>
           <Ionicons name="ios-arrow-forward" size={25} color="#1B9CFC" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => this.navigation.navigate("Login")}>
+        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate("Login")}>
           <Text style={styles.text}>Log out</Text>
           <Ionicons name="ios-arrow-forward" size={25} color="#1B9CFC" />
         </TouchableOpacity>

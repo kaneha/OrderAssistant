@@ -17,6 +17,9 @@ import {
   Ionicons
 } from "@expo/vector-icons";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
+import { Provider } from "react-redux";
+import store1 from "./src/store/Store";
+import SignUpScreen from "./src/screens/SignUpScreen";
 
 const HomeStackNavigator = createStackNavigator({
   Home: {
@@ -24,7 +27,7 @@ const HomeStackNavigator = createStackNavigator({
     navigationOptions: ({ navigation }) => {
       return {
         headerTitle: "Home",
-        headerTintColor: "white", 
+        headerTintColor: "white",
         headerStyle: {
           backgroundColor: "#0984e3"
         },
@@ -137,7 +140,7 @@ const MainTabNavigator = createMaterialBottomTabNavigator(
         )
       }
     },
-    OrderList: {
+    OrderListStackNavigator: {
       screen: OrderListStackNavigator,
       navigationOptions: {
         tabBarLabel: "Orders",
@@ -146,7 +149,7 @@ const MainTabNavigator = createMaterialBottomTabNavigator(
         )
       }
     },
-    Account: {
+    AccountStackNavigator: {
       screen: AccountStackNavigator,
       navigationOptions: {
         tabBarLabel: "Account",
@@ -155,7 +158,7 @@ const MainTabNavigator = createMaterialBottomTabNavigator(
         )
       }
     },
-    Setting: {
+    SettingsStackNavigator: {
       screen: SettingsStackNavigator,
       navigationOptions: {
         tabBarLabel: "Setting",
@@ -166,6 +169,7 @@ const MainTabNavigator = createMaterialBottomTabNavigator(
     }
   },
   {
+    initialRouteName: "HomeStackNavigator",
     activeTintColor: "#0984e3",
     barStyle: {
       backgroundColor: "white"
@@ -208,12 +212,21 @@ const AppStackNavigator = createStackNavigator(
 
 const AppSwitchNavigator = createSwitchNavigator(
   {
-    //Login: { screen: LoginScreen },
+    Login: { screen: LoginScreen },
+    SignUp: { screen: SignUpScreen},
     AppStackNavigator: { screen: AppStackNavigator }
   },
   {}
 );
 
-const App = createAppContainer(AppSwitchNavigator);
+const AppContainer = createAppContainer(AppSwitchNavigator);
 
-export default App;
+export default class App extends React.Component {
+  render() {
+    return (
+      <Provider store={store1}>
+        <AppContainer />
+      </Provider>
+    );
+  }
+}

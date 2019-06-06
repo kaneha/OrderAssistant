@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import Styles from "./../css/Styles";
 
 export default class Shop extends React.Component {
@@ -11,9 +11,27 @@ export default class Shop extends React.Component {
   render() {
     return (
       <TouchableOpacity style={Styles.shop} onPress={this.props.onPress}>
-        <Text style={Styles.shopName}>{this.props.name}</Text>
-        <Text>{this.props.address}</Text>
-        <Text>Rate</Text>
+        <View
+          style={{
+            flex: 3,
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <Image
+            style={Styles.imageShop}
+            source={{
+              uri: this.props.imageURL
+            }}
+          />
+        </View>
+        <View style={{ flex: 7, marginBottom: 10, marginTop: 10 }}>
+          <Text style={Styles.labelText}>{this.props.name}</Text>
+          <Text style={Styles.infoText}>{this.props.address}</Text>
+          <Text style={Styles.infoText}>{this.props.city}</Text>
+          <Text style={Styles.infoText}>Describe</Text>
+          <Text style={Styles.infoText}>Rate</Text>
+        </View>
       </TouchableOpacity>
     );
   }
