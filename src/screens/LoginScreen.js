@@ -35,18 +35,18 @@ class LoginScreen extends React.Component {
   }
 
   Login() {
-    // firebaseApp
-    //   .auth()
-    //   .signInWithEmailAndPassword(this.state.email, this.state.password)
-    //   .then(() => {
-    //     this.setState({
-    //       email: "",
-    //       password: ""
-    //     });
-    this.props.navigation.navigate("AppStackNavigator");
-    //   })
-    //   .catch(function(error) {});
-    this.props.signInDispatch(this.state.email);
+    firebaseApp
+      .auth()
+      .signInWithEmailAndPassword(this.state.email, this.state.password)
+      .then(() => {
+        this.props.signInDispatch(this.state.email);
+        this.setState({
+          email: "",
+          password: ""
+        });
+        this.props.navigation.navigate("AppStackNavigator");
+      })
+      .catch(function(error) {});
   }
 
   render() {

@@ -38,7 +38,6 @@ class OrderListScreen extends Component {
         dishes: this.props.dishes
       });
     }
-    // console.log(this.props.email);
   }
 
   totalPrice() {
@@ -83,7 +82,7 @@ class OrderListScreen extends Component {
   confirmButton() {
     if (this.props.shopName && this.props.dishes && this.props.keyShop) {
       var order = {
-        // email: this.props.email,
+        userKey: this.props.userKey,
         keyShop: this.props.keyShop,
         shopName: this.props.shopName
       };
@@ -94,7 +93,9 @@ class OrderListScreen extends Component {
           orderList.forEach(order => {
             doc.collection("list").add(order);
           });
-          console.log("Success");
+          ToastAndroid.show("Order Success", ToastAndroid.SHORT);
+          this.props.sendKeyOrder(doc.id);
+          this.props.navigation.navigate("SettingsStackNavigator");
         })
         .catch(error => console.log(error));
     } else {
@@ -175,6 +176,8 @@ class OrderListScreen extends Component {
         }
       ]
     };
+
+    // console.log(this.props.userKey);
 
     return (
       <View
@@ -383,15 +386,15 @@ const mapStateToProps = (state, ownProps) => {
   return {
     shopName: state.shopName,
     dishes: state.dishes,
-    email: state.email,
-    keyShop: state.keyShop
+    keyShop: state.keyShop,
+    userKey: state.userKey
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    dispatch1: () => {
-      dispatch(actionCreator);
+    sendKeyOrder: keyOrder => {
+      dispatch({ type: "SEND_KEY_ORDER", keyOrder });
     }
   };
 };

@@ -20,6 +20,7 @@ const resetAction = StackActions.reset({
 
 //create reference to firestore
 const shopsRef = firebaseApp.firestore().collection("shops");
+const usersRef = firebaseApp.firestore().collection("users");
 
 class ShopScreen extends Component {
   constructor(props) {
@@ -31,7 +32,8 @@ class ShopScreen extends Component {
       menu: [],
       order: [],
       totalPrice: 0,
-      keyShop: ""
+      keyShop: "",
+      userKey: ""
     };
   }
 
@@ -73,6 +75,20 @@ class ShopScreen extends Component {
         .catch(error => {
           console.log(error);
         });
+
+      if (this.props.email) {
+        var tmp = "";
+        await usersRef.get().then(doc => {
+          doc.forEach(item => {
+            if (item.data().email === this.props.email) {
+              tmp = item.id;
+            }
+          });
+        });
+        this.setState({
+          userKey: tmp
+        });
+      }
     }
   }
 
@@ -123,9 +139,10 @@ class ShopScreen extends Component {
     });
   }
 
-  orderButton(keyShop, shopName, order) {
+  orderButton(userKey, keyShop, shopName, order) {
     if (order.length > 0) {
       var list = {};
+      list.userKey = userKey;
       list.keyShop = keyShop;
       list.shopName = shopName;
       list.order = order;
@@ -201,6 +218,7 @@ class ShopScreen extends Component {
               style={Styles.orderButton}
               onPress={() =>
                 this.orderButton(
+                  this.state.userKey,
                   this.state.keyShop,
                   this.state.name,
                   this.state.order
@@ -225,7 +243,9 @@ class ShopScreen extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  return {};
+  return {
+    email: state.email
+  };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {

@@ -35,7 +35,10 @@ export default class SignUpScreen extends Component {
             role: "user",
             phone: phone
           };
-          userRef.add(user).then(() => console.log("create success"));
+          userRef.add(user).then(() => {
+            ToastAndroid.show("Created new account", ToastAndroid.SHORT);
+            this.props.navigation.navigate("Login");
+          });
         })
         .catch(error => {
           console.log(error);
